@@ -221,13 +221,13 @@ export default function Home() {
             <div className="flex flex-col gap-3 sm:flex-row">
               <a
                 href="#contact"
-                className="inline-flex items-center justify-center rounded-full bg-[var(--brand-dark)] px-7 py-3.5 text-sm font-semibold text-[#f8fbff] shadow-[0_16px_34px_rgba(15,43,87,0.22)] transition hover:-translate-y-0.5 hover:opacity-95"
+                className="btn-dark px-7 py-3.5 text-sm font-semibold"
               >
                 Get a Quote
               </a>
               <a
                 href="#pricing"
-                className="inline-flex items-center justify-center rounded-full border border-[var(--card-border)] bg-white px-7 py-3.5 text-sm font-semibold text-slate-700 shadow-sm transition hover:-translate-y-0.5 hover:border-slate-400 hover:bg-slate-50"
+                className="btn-light px-7 py-3.5 text-sm font-semibold"
               >
                 View Packages
               </a>
@@ -377,8 +377,8 @@ export default function Home() {
                 className={[
                   "mt-6 inline-flex items-center justify-center rounded-full px-5 py-3 text-sm font-semibold transition",
                   item.featured
-                    ? "bg-[var(--brand-dark)] text-[#f8fbff] hover:opacity-95"
-                    : "border border-slate-300 bg-white text-slate-800 hover:bg-slate-50",
+                    ? "btn-dark"
+                    : "btn-light",
                 ].join(" ")}
               >
                 {item.cta}
@@ -471,7 +471,7 @@ export default function Home() {
                   href={item.href}
                   target="_blank"
                   rel="noreferrer"
-                  className="mt-6 inline-flex rounded-full border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-[var(--brand-dark)] transition hover:border-slate-400 hover:bg-slate-50"
+                  className="btn-light mt-6 px-4 py-2 text-sm font-semibold"
                 >
                   {item.cta}
                 </a>
@@ -548,8 +548,7 @@ export default function Home() {
                 If your business needs a clean, mobile-friendly website that clearly explains your services and makes it easier for customers to contact you, Harbour Web Studio can help.
               </p>
               <div className="mt-6 space-y-2 text-sm text-slate-300">
-                <p>Email: hello@yourdomain.com</p>
-                <p>Phone/Text: {business.phoneDisplay}</p>
+                <p>Email: dennis18922182165@gmail.com</p>
                 <p>Location: Anywhere</p>
               </div>
               <p className="mt-4 text-sm text-slate-400">
@@ -558,14 +557,14 @@ export default function Home() {
             </div>
             <div className="flex flex-col gap-3 sm:flex-row">
               <a
-                href="mailto:hello@yourdomain.com"
-                className="inline-flex items-center justify-center rounded-full bg-white px-6 py-3 text-sm font-semibold text-[var(--brand-dark)] shadow-sm transition hover:bg-slate-200"
+                href="mailto:dennis18922182165@gmail.com"
+                className="btn-light px-6 py-3 text-sm font-semibold"
               >
                 Get a Quote
               </a>
               <a
-                href="#services"
-                className="inline-flex items-center justify-center rounded-full border border-white/20 bg-[var(--brand-dark)] px-6 py-3 text-sm font-semibold text-white transition hover:opacity-95"
+                href="mailto:dennis18922182165@gmail.com"
+                className="btn-dark px-6 py-3 text-sm font-semibold"
               >
                 Send a Message
               </a>

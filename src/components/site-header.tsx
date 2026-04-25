@@ -38,7 +38,7 @@ export default function SiteHeader() {
             <a
               key={item.href}
               href={item.href}
-              className="rounded-xl bg-white px-2 py-2 text-[var(--brand-dark)] transition sm:rounded-full sm:px-3 sm:py-2 lg:px-4 lg:py-2.5 hover:bg-[var(--brand-soft)] hover:text-[var(--brand-dark)]"
+              className="btn-light rounded-xl px-2 py-2 text-xs font-medium sm:rounded-full sm:px-3 sm:py-2 sm:text-sm lg:px-4 lg:py-2.5 lg:text-sm"
             >
               {item.label}
             </a>

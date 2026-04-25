@@ -36,6 +36,42 @@ a {
   text-decoration: none;
 }
 
+.btn-light {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  border: 1px solid var(--card-border);
+  background: #ffffff;
+  color: var(--brand-dark);
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.06);
+  transition: transform 220ms ease, box-shadow 220ms ease, background-color 220ms ease, border-color 220ms ease, color 220ms ease;
+}
+
+.btn-light:hover {
+  transform: translateY(-2px);
+  background: #f8fbfc;
+  border-color: #b9cad6;
+}
+
+.btn-dark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: linear-gradient(180deg, #173768 0%, #0f2b57 100%);
+  color: #f7fbff;
+  box-shadow: 0 18px 36px rgba(15, 43, 87, 0.24);
+  transition: transform 220ms ease, box-shadow 220ms ease, opacity 220ms ease, background-color 220ms ease;
+}
+
+.btn-dark:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 22px 42px rgba(15, 43, 87, 0.28);
+  opacity: 0.98;
+}
+
 section {
   scroll-margin-top: 96px;
 }
