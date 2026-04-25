@@ -1,0 +1,37 @@
+export const business = {
+  name: "Harbour Web Studio",
+  shortName: "Harbour",
+  tagline: "Websites for local businesses in Vancouver & Richmond",
+  heroBadge: "Harbour Web Studio • Vancouver & Richmond",
+  heroTitle: "Simple websites for local businesses.",
+  heroSubtitle:
+    "Harbour Web Studio builds clean, mobile-friendly websites that help customers find you, trust your business, and contact you with ease.",
+  primaryCtaLabel: "Get a Quote",
+  primaryCtaHref: "#contact",
+  secondaryCtaLabel: "View Packages",
+  secondaryCtaHref: "#pricing",
+  phoneDisplay: "your phone number",
+  phoneE164: "+1-000-000-0000",
+  addressLine: "Vancouver & Richmond, BC",
+  streetAddress: "Vancouver & Richmond",
+  city: "Vancouver",
+  region: "BC",
+  postalCode: "",
+  country: "CA",
+  neighborhood: "Greater Vancouver",
+  hoursDisplay: "By inquiry",
+  opens: "09:00",
+  closes: "17:00",
+  areaServed: ["Vancouver", "Richmond", "Canada"],
+  siteUrl: "https://harbour-web-studio.vercel.app",
+  logoPath: "/assets/harbour-logo.png",
+  faviconPath: "/assets/harbour-logo.png",
+  socialLinks: [],
+  colors: {
+    brand: "#6ea9b0",
+    brandDark: "#0f2b57",
+    brandSoft: "#dceff1",
+  },
+};
+
+export type BusinessConfig = typeof business;
