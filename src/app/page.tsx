@@ -471,7 +471,7 @@ export default function Home() {
                   href={item.href}
                   target="_blank"
                   rel="noreferrer"
-                  className="mt-6 inline-flex rounded-full border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-800 transition hover:border-slate-400 hover:bg-slate-50"
+                  className="mt-6 inline-flex rounded-full border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-[var(--brand-dark)] transition hover:border-slate-400 hover:bg-slate-50"
                 >
                   {item.cta}
                 </a>
@@ -565,7 +565,7 @@ export default function Home() {
               </a>
               <a
                 href="#services"
-                className="inline-flex items-center justify-center rounded-full border border-white/20 bg-white/5 px-6 py-3 text-sm font-semibold text-[#f8fbff] transition hover:bg-white/10"
+                className="inline-flex items-center justify-center rounded-full border border-white/20 bg-[var(--brand-dark)] px-6 py-3 text-sm font-semibold text-white transition hover:opacity-95"
               >
                 Send a Message
               </a>
