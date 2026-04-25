@@ -140,7 +140,8 @@ const portfolioItems = [
       "Basic SEO structure",
     ],
     result: "Built to make the business look more professional online and help customers quickly understand the offer before calling or visiting.",
-    cta: "Case Study",
+    cta: "View Case",
+    href: "https://wander-bike-rentals.vercel.app/",
   },
   {
     title: "Sample Auto Detailing Website",
@@ -156,7 +157,8 @@ const portfolioItems = [
       "Basic local SEO setup",
     ],
     result: "Designed to help a local auto service business turn website visitors into quote requests and phone calls.",
-    cta: "View Sample",
+    cta: "",
+    href: "",
   },
   {
     title: "Sample Handyman Website",
@@ -172,7 +174,8 @@ const portfolioItems = [
       "Click-to-call button",
     ],
     result: "Designed to make it easier for homeowners to understand available services and request help.",
-    cta: "View Sample",
+    cta: "",
+    href: "",
   },
 ] as const;
 
@@ -218,7 +221,7 @@ export default function Home() {
             <div className="flex flex-col gap-3 sm:flex-row">
               <a
                 href="#contact"
-                className="inline-flex items-center justify-center rounded-full bg-[var(--brand-dark)] px-7 py-3.5 text-sm font-semibold text-white shadow-[0_16px_34px_rgba(15,43,87,0.22)] transition hover:-translate-y-0.5 hover:opacity-95"
+                className="inline-flex items-center justify-center rounded-full bg-[var(--brand-dark)] px-7 py-3.5 text-sm font-semibold text-[#f8fbff] shadow-[0_16px_34px_rgba(15,43,87,0.22)] transition hover:-translate-y-0.5 hover:opacity-95"
               >
                 Get a Quote
               </a>
@@ -231,12 +234,15 @@ export default function Home() {
             </div>
 
             <div className="grid gap-4 pt-2 sm:grid-cols-3">
-              {homepageConfig.heroStats.map((item) => (
-                <div key={item.label} className="hover-lift rounded-2xl border border-white/70 bg-white/80 p-4 shadow-sm backdrop-blur">
-                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">{item.label}</p>
-                  <p className="mt-2 text-sm font-medium text-slate-900">{item.value}</p>
-                </div>
-              ))}
+              {homepageConfig.heroStats.map((item) => {
+                const value = item.label === "Areas" ? "Anywhere" : item.value;
+                return (
+                  <div key={item.label} className="hover-lift rounded-2xl border border-white/70 bg-white/80 p-4 shadow-sm backdrop-blur">
+                    <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">{item.label}</p>
+                    <p className="mt-2 text-sm font-medium text-slate-900">{value}</p>
+                  </div>
+                );
+              })}
             </div>
           </div>
 
@@ -371,7 +377,7 @@ export default function Home() {
                 className={[
                   "mt-6 inline-flex items-center justify-center rounded-full px-5 py-3 text-sm font-semibold transition",
                   item.featured
-                    ? "bg-[var(--brand-dark)] text-white hover:opacity-95"
+                    ? "bg-[var(--brand-dark)] text-[#f8fbff] hover:opacity-95"
                     : "border border-slate-300 bg-white text-slate-800 hover:bg-slate-50",
                 ].join(" ")}
               >
@@ -410,7 +416,7 @@ export default function Home() {
         <div className="mx-auto grid max-w-6xl gap-10 px-6 lg:grid-cols-[1.05fr_1fr] lg:px-8">
           <div>
             <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[#b7d8dd]">Why Choose Harbour Web Studio</p>
-            <h2 className="mt-3 text-3xl font-bold tracking-tight">
+            <h2 className="mt-3 text-3xl font-bold tracking-tight text-white">
               Built for small businesses, not big corporate websites.
             </h2>
             <p className="mt-5 max-w-2xl text-base leading-8 text-slate-300">
@@ -460,9 +466,16 @@ export default function Home() {
               <p className="mt-5 text-sm leading-7 text-slate-600">
                 <span className="font-semibold text-slate-900">Result: </span>{item.result}
               </p>
-              <div className="mt-6 inline-flex rounded-full border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700">
-                {item.cta}
-              </div>
+              {item.cta ? (
+                <a
+                  href={item.href}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="mt-6 inline-flex rounded-full border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-800 transition hover:border-slate-400 hover:bg-slate-50"
+                >
+                  {item.cta}
+                </a>
+              ) : null}
             </div>
           ))}
         </div>
@@ -528,7 +541,7 @@ export default function Home() {
           <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
             <div className="max-w-2xl">
               <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[#b7d8dd]">Contact</p>
-              <h2 className="mt-3 text-3xl font-bold tracking-tight">
+              <h2 className="mt-3 text-3xl font-bold tracking-tight text-white">
                 Ready to build a better website for your business?
               </h2>
               <p className="mt-4 text-base leading-8 text-slate-300">
@@ -537,7 +550,7 @@ export default function Home() {
               <div className="mt-6 space-y-2 text-sm text-slate-300">
                 <p>Email: hello@yourdomain.com</p>
                 <p>Phone/Text: {business.phoneDisplay}</p>
-                <p>Location: Vancouver & Richmond, BC</p>
+                <p>Location: Anywhere</p>
               </div>
               <p className="mt-4 text-sm text-slate-400">
                 Tell me a bit about your business, what kind of website you need, and whether you already have photos, pricing, and service information ready.
@@ -546,13 +559,13 @@ export default function Home() {
             <div className="flex flex-col gap-3 sm:flex-row">
               <a
                 href="mailto:hello@yourdomain.com"
-                className="inline-flex items-center justify-center rounded-full bg-white px-6 py-3 text-sm font-semibold text-slate-950 shadow-sm transition hover:bg-slate-200"
+                className="inline-flex items-center justify-center rounded-full bg-white px-6 py-3 text-sm font-semibold text-[var(--brand-dark)] shadow-sm transition hover:bg-slate-200"
               >
                 Get a Quote
               </a>
               <a
                 href="#services"
-                className="inline-flex items-center justify-center rounded-full border border-white/20 bg-white/5 px-6 py-3 text-sm font-semibold text-white transition hover:bg-white/10"
+                className="inline-flex items-center justify-center rounded-full border border-white/20 bg-white/5 px-6 py-3 text-sm font-semibold text-[#f8fbff] transition hover:bg-white/10"
               >
                 Send a Message
               </a>
