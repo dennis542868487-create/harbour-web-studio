@@ -1,9 +1,15 @@
 import Image from "next/image";
 import type { Metadata } from "next";
 import { business } from "../../site-config/business";
-import { faqs } from "../../site-config/faq";
+import { faqs as fallbackFaqs } from "../../site-config/faq";
 import { homepageConfig } from "../../site-config/homepage";
 import { getLocalBusinessSchema } from "../../site-config/schema";
+import {
+  faqItemsQuery,
+  homepageQuery,
+  siteSettingsQuery,
+} from "../lib/sanity/queries";
+import { sanityClient } from "../lib/sanity/client";
 
 export const metadata: Metadata = {
   title: homepageConfig.metadata.title,
@@ -19,6 +25,31 @@ export const metadata: Metadata = {
 };
 
 const localBusinessSchema = getLocalBusinessSchema(homepageConfig.metadata.description);
+
+type SiteSettingsData = {
+  siteTitle?: string;
+  tagline?: string;
+  email?: string;
+  location?: string;
+  primaryCtaLabel?: string;
+  primaryCtaHref?: string;
+  secondaryCtaLabel?: string;
+  secondaryCtaHref?: string;
+};
+
+type HomepageData = {
+  heroTitle?: string;
+  heroSubtitle?: string;
+  heroSupportingText?: string;
+  heroStats?: { label?: string; value?: string }[];
+  faqIntro?: string;
+  contactIntro?: string;
+};
+
+type FaqItemData = {
+  question?: string;
+  answer?: string;
+};
 
 const serviceItems = [
   {
@@ -187,7 +218,62 @@ const processSteps = [
   "Once approved, the website is launched with the appropriate technical setup depending on the package.",
 ] as const;
 
-export default function Home() {
+async function getSanityHomepageData() {
+  try {
+    const [siteSettings, homepage, faqItems] = await Promise.all([
+      sanityClient.fetch(siteSettingsQuery) as Promise<SiteSettingsData | null>,
+      sanityClient.fetch(homepageQuery) as Promise<HomepageData | null>,
+      sanityClient.fetch(faqItemsQuery) as Promise<FaqItemData[]>,
+    ]);
+
+    return {
+      siteSettings,
+      homepage,
+      faqItems,
+    };
+  } catch {
+    return {
+      siteSettings: null,
+      homepage: null,
+      faqItems: [],
+    };
+  }
+}
+
+export default async function Home() {
+  const { siteSettings, homepage, faqItems } = await getSanityHomepageData();
+
+  const heroTitle = homepage?.heroTitle || business.heroTitle;
+  const heroSubtitle = homepage?.heroSubtitle || business.heroSubtitle;
+  const heroSupportingText =
+    homepage?.heroSupportingText ||
+    'Ideal for restaurants, service businesses, rental shops, trades, clinics, beauty studios, and small local businesses that need a professional online presence without overcomplicating the process.';
+
+  const heroStats =
+    homepage?.heroStats?.length
+      ? homepage.heroStats.map((item: { label?: string; value?: string }) => ({
+          label: item.label || '',
+          value: item.label === 'Areas' ? 'Anywhere' : item.value || '',
+        }))
+      : homepageConfig.heroStats.map((item: { label: string; value: string }) => ({
+          ...item,
+          value: item.label === 'Areas' ? 'Anywhere' : item.value,
+        }));
+
+  const contactEmail = siteSettings?.email || 'dennis18922182165@gmail.com';
+  const contactLocation = siteSettings?.location || 'Anywhere';
+  const primaryCtaLabel = siteSettings?.primaryCtaLabel || 'Get a Quote';
+  const primaryCtaHref = siteSettings?.primaryCtaHref || `mailto:${contactEmail}`;
+  const secondaryCtaLabel = siteSettings?.secondaryCtaLabel || 'View Packages';
+  const secondaryCtaHref = siteSettings?.secondaryCtaHref || '#pricing';
+
+  const renderedFaqs =
+    faqItems.length > 0
+      ? faqItems
+          .filter((item: FaqItemData) => item.question && item.answer)
+          .map((item: FaqItemData) => [item.question as string, item.answer as string] as const)
+      : fallbackFaqs;
+
   return (
     <main className="pb-20 text-slate-900">
       <script
@@ -208,41 +294,38 @@ export default function Home() {
 
             <div className="space-y-5">
               <h1 className="text-4xl font-bold tracking-tight text-slate-950 sm:text-5xl lg:text-6xl lg:leading-[1.05]">
-                {business.heroTitle}
+                {heroTitle}
               </h1>
               <p className="max-w-2xl text-lg leading-8 text-slate-600 sm:text-xl">
-                {business.heroSubtitle}
+                {heroSubtitle}
               </p>
               <p className="max-w-2xl text-base leading-8 text-slate-600">
-                Ideal for restaurants, service businesses, rental shops, trades, clinics, beauty studios, and small local businesses that need a professional online presence without overcomplicating the process.
+                {heroSupportingText}
               </p>
             </div>
 
             <div className="flex flex-col gap-3 sm:flex-row">
               <a
-                href="#contact"
-                className="btn-dark px-7 py-3.5 text-sm font-semibold"
+                href={primaryCtaHref}
+                className="inline-flex items-center justify-center rounded-full bg-[var(--brand-dark)] px-7 py-3.5 text-sm font-semibold text-[#f8fbff] shadow-[0_16px_34px_rgba(15,43,87,0.22)] transition hover:-translate-y-0.5 hover:opacity-95"
               >
-                Get a Quote
+                {primaryCtaLabel}
               </a>
               <a
-                href="#pricing"
-                className="btn-light px-7 py-3.5 text-sm font-semibold"
+                href={secondaryCtaHref}
+                className="inline-flex items-center justify-center rounded-full border border-[var(--card-border)] bg-white px-7 py-3.5 text-sm font-semibold text-slate-700 shadow-sm transition hover:-translate-y-0.5 hover:border-slate-400 hover:bg-slate-50"
               >
-                View Packages
+                {secondaryCtaLabel}
               </a>
             </div>
 
             <div className="grid gap-4 pt-2 sm:grid-cols-3">
-              {homepageConfig.heroStats.map((item) => {
-                const value = item.label === "Areas" ? "Anywhere" : item.value;
-                return (
-                  <div key={item.label} className="hover-lift rounded-2xl border border-white/70 bg-white/80 p-4 shadow-sm backdrop-blur">
-                    <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">{item.label}</p>
-                    <p className="mt-2 text-sm font-medium text-slate-900">{value}</p>
-                  </div>
-                );
-              })}
+              {heroStats.map((item: { label: string; value: string }) => (
+                <div key={`${item.label}-${item.value}`} className="hover-lift rounded-2xl border border-white/70 bg-white/80 p-4 shadow-sm backdrop-blur">
+                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">{item.label}</p>
+                  <p className="mt-2 text-sm font-medium text-slate-900">{item.value}</p>
+                </div>
+              ))}
             </div>
           </div>
 
@@ -296,7 +379,7 @@ export default function Home() {
         </div>
 
         <div className="mt-10 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
-          {homepageConfig.highlights.map((item) => (
+          {homepageConfig.highlights.map((item: { title: string; text: string }) => (
             <div key={item.title} className="hover-lift rounded-[2rem] border border-[var(--card-border)] bg-white p-7 shadow-[0_14px_34px_rgba(15,23,42,0.06)]">
               <h3 className="text-lg font-semibold text-slate-950">{item.title}</h3>
               <p className="mt-4 text-sm leading-7 text-slate-600">{item.text}</p>
@@ -348,7 +431,7 @@ export default function Home() {
               className={[
                 "hover-lift rounded-[2rem] border bg-white p-7 shadow-[0_14px_34px_rgba(15,23,42,0.06)] hover:shadow-[0_20px_45px_rgba(15,23,42,0.08)]",
                 item.featured ? "border-[var(--brand)] ring-1 ring-[var(--brand-soft)]" : "border-[var(--card-border)]",
-              ].join(" ")}
+              ].join(' ')}
             >
               <div className="flex items-start justify-between gap-4">
                 <h3 className="text-xl font-semibold text-slate-950">{item.name}</h3>
@@ -377,9 +460,9 @@ export default function Home() {
                 className={[
                   "mt-6 inline-flex items-center justify-center rounded-full px-5 py-3 text-sm font-semibold transition",
                   item.featured
-                    ? "btn-dark"
-                    : "btn-light",
-                ].join(" ")}
+                    ? 'bg-[var(--brand-dark)] text-[#f8fbff] hover:opacity-95'
+                    : 'border border-slate-300 bg-white text-slate-800 hover:bg-slate-50',
+                ].join(' ')}
               >
                 {item.cta}
               </a>
@@ -471,7 +554,7 @@ export default function Home() {
                   href={item.href}
                   target="_blank"
                   rel="noreferrer"
-                  className="btn-light mt-6 px-4 py-2 text-sm font-semibold"
+                  className="mt-6 inline-flex rounded-full border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-800 transition hover:border-slate-400 hover:bg-slate-50"
                 >
                   {item.cta}
                 </a>
@@ -524,7 +607,7 @@ export default function Home() {
           Frequently asked questions.
         </h2>
         <div className="mt-8 grid gap-5 md:grid-cols-2">
-          {faqs.map(([question, answer]) => (
+          {renderedFaqs.map(([question, answer]: readonly [string, string]) => (
             <div
               key={question}
               className="hover-lift rounded-[2rem] border border-[var(--card-border)] bg-white p-7 shadow-[0_14px_34px_rgba(15,23,42,0.06)]"
@@ -545,11 +628,11 @@ export default function Home() {
                 Ready to build a better website for your business?
               </h2>
               <p className="mt-4 text-base leading-8 text-slate-300">
-                If your business needs a clean, mobile-friendly website that clearly explains your services and makes it easier for customers to contact you, Harbour Web Studio can help.
+                {homepage?.contactIntro || 'If your business needs a clean, mobile-friendly website that clearly explains your services and makes it easier for customers to contact you, Harbour Web Studio can help.'}
               </p>
               <div className="mt-6 space-y-2 text-sm text-slate-300">
-                <p>Email: dennis18922182165@gmail.com</p>
-                <p>Location: Anywhere</p>
+                <p>Email: {contactEmail}</p>
+                <p>Location: {contactLocation}</p>
               </div>
               <p className="mt-4 text-sm text-slate-400">
                 Tell me a bit about your business, what kind of website you need, and whether you already have photos, pricing, and service information ready.
@@ -557,14 +640,14 @@ export default function Home() {
             </div>
             <div className="flex flex-col gap-3 sm:flex-row">
               <a
-                href="mailto:dennis18922182165@gmail.com"
-                className="btn-light px-6 py-3 text-sm font-semibold"
+                href={`mailto:${contactEmail}`}
+                className="inline-flex items-center justify-center rounded-full bg-white px-6 py-3 text-sm font-semibold text-[var(--brand-dark)] shadow-sm transition hover:bg-slate-200"
               >
                 Get a Quote
               </a>
               <a
-                href="mailto:dennis18922182165@gmail.com"
-                className="btn-dark px-6 py-3 text-sm font-semibold"
+                href={`mailto:${contactEmail}`}
+                className="inline-flex items-center justify-center rounded-full border border-white/20 bg-[var(--brand-dark)] px-6 py-3 text-sm font-semibold text-white transition hover:opacity-95"
               >
                 Send a Message
               </a>
