@@ -7,7 +7,7 @@ const coreRoutes = [
     .filter((href) => href !== "/"),
 ] as const;
 
-export const sitemapRoutes = [...new Set([...coreRoutes])];
+export const sitemapRoutes = [...new Set([...coreRoutes, "/booking"])];
 
 export const robotsConfig = {
   allow: "/",

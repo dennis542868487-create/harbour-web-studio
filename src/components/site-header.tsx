@@ -3,11 +3,11 @@ import Link from "next/link";
 import { business } from "../../site-config/business";
 
 const navItems = [
-  { href: "#services", label: "Services" },
-  { href: "#pricing", label: "Pricing" },
-  { href: "#portfolio", label: "Portfolio" },
-  { href: "#faq", label: "FAQ" },
-  { href: "#contact", label: "Contact" },
+  { href: "/#services", label: "Services" },
+  { href: "/#pricing", label: "Pricing" },
+  { href: "/#portfolio", label: "Portfolio" },
+  { href: "/#faq", label: "FAQ" },
+  { href: "/#contact", label: "Contact" },
 ];
 
 export default function SiteHeader() {
@@ -33,7 +33,7 @@ export default function SiteHeader() {
           </div>
         </div>
 
-        <nav className="grid grid-cols-5 gap-1 text-center text-xs font-medium text-slate-600 sm:flex sm:flex-nowrap sm:items-center sm:gap-1.5 sm:text-sm lg:gap-2 lg:text-sm">
+        <nav className="grid grid-cols-3 gap-1 text-center text-xs font-medium text-slate-600 sm:flex sm:flex-nowrap sm:items-center sm:gap-1.5 sm:text-sm lg:gap-2 lg:text-sm">
           {navItems.map((item) => (
             <a
               key={item.href}
@@ -43,6 +43,12 @@ export default function SiteHeader() {
               {item.label}
             </a>
           ))}
+          <Link
+            href="/booking"
+            className="btn-dark rounded-xl px-2 py-2 text-xs font-semibold sm:rounded-full sm:px-3 sm:py-2 sm:text-sm lg:px-4 lg:py-2.5 lg:text-sm"
+          >
+            Book Now
+          </Link>
         </nav>
       </div>
     </header>
