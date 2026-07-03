@@ -44,6 +44,14 @@ export const BOOKING_STATUSES: BookingStatus[] = [
   "cancelled",
 ];
 
+// The business operates in Vancouver; Vercel servers run in UTC, so
+// "today" must be computed in the business timezone, not server time.
+export function vancouverToday(): string {
+  return new Date().toLocaleDateString("en-CA", {
+    timeZone: "America/Vancouver",
+  }); // en-CA gives YYYY-MM-DD
+}
+
 export function formatTimeSlot(slot: string): string {
   const [h, m] = slot.split(":").map(Number);
   const suffix = h >= 12 ? "PM" : "AM";

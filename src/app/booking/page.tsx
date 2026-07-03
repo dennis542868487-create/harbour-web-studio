@@ -1,7 +1,15 @@
 import type { Metadata } from "next";
 import BookingForm from "@/components/booking-form";
-import { BOOKING_SERVICES, BOOKING_TIME_SLOTS } from "@/lib/booking-shared";
+import {
+  BOOKING_SERVICES,
+  BOOKING_TIME_SLOTS,
+  vancouverToday,
+} from "@/lib/booking-shared";
 import { business } from "../../../site-config/business";
+
+// Rendered per request so the date picker's minimum is always today
+// (a static build would freeze it at deploy time).
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Book a Free Consultation",
@@ -9,11 +17,6 @@ export const metadata: Metadata = {
     "Book a free website consultation with Harbour Web Studio. Pick a date and time that works for you — we'll confirm by email.",
   alternates: { canonical: "/booking" },
 };
-
-function todayString(): string {
-  const now = new Date();
-  return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
-}
 
 export default function BookingPage() {
   return (
@@ -35,7 +38,7 @@ export default function BookingPage() {
         <BookingForm
           services={BOOKING_SERVICES}
           timeSlots={BOOKING_TIME_SLOTS}
-          minDate={todayString()}
+          minDate={vancouverToday()}
         />
       </div>
     </main>

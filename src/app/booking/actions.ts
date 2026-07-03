@@ -1,7 +1,11 @@
 "use server";
 
 import { supabaseAdmin } from "@/lib/supabase/admin";
-import { BOOKING_SERVICES, BOOKING_TIME_SLOTS } from "@/lib/bookings";
+import {
+  BOOKING_SERVICES,
+  BOOKING_TIME_SLOTS,
+  vancouverToday,
+} from "@/lib/booking-shared";
 
 export type BookingFormState = {
   status: "idle" | "success" | "error";
@@ -31,9 +35,7 @@ export async function createBooking(
   if (!DATE_RE.test(bookingDate)) {
     return { status: "error", error: "Please pick a valid date." };
   }
-  const today = new Date();
-  const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}`;
-  if (bookingDate < todayStr) {
+  if (bookingDate < vancouverToday()) {
     return { status: "error", error: "Please pick a date from today onwards." };
   }
   if (service && !(BOOKING_SERVICES as readonly string[]).includes(service)) {

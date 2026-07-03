@@ -4,6 +4,7 @@ import { requireAdmin } from "@/lib/admin-auth";
 import { getBookingsForMonth } from "@/lib/bookings";
 import {
   formatTimeSlot,
+  vancouverToday,
   type Booking,
   type BookingStatus,
 } from "@/lib/booking-shared";
@@ -43,11 +44,6 @@ function pad(n: number): string {
   return String(n).padStart(2, "0");
 }
 
-function todayString(): string {
-  const now = new Date();
-  return `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
-}
-
 function parseMonth(raw: string | undefined): { year: number; month: number } {
   const m = raw?.match(/^(\d{4})-(\d{2})$/);
   if (m) {
@@ -55,8 +51,8 @@ function parseMonth(raw: string | undefined): { year: number; month: number } {
     const month = Number(m[2]);
     if (month >= 1 && month <= 12) return { year, month };
   }
-  const now = new Date();
-  return { year: now.getFullYear(), month: now.getMonth() + 1 };
+  const today = vancouverToday();
+  return { year: Number(today.slice(0, 4)), month: Number(today.slice(5, 7)) };
 }
 
 type SearchParams = Promise<{
@@ -89,7 +85,7 @@ export default async function AdminPage({
 
   const daysInMonth = new Date(year, month, 0).getDate();
   const firstWeekday = new Date(year, month - 1, 1).getDay();
-  const today = todayString();
+  const today = vancouverToday();
 
   const prev = month === 1 ? `${year - 1}-12` : `${year}-${pad(month - 1)}`;
   const next = month === 12 ? `${year + 1}-01` : `${year}-${pad(month + 1)}`;
